@@ -7,7 +7,8 @@
 - ✅ Interface de chat simples para inserção de prompts
 - ✅ Geração automática de texto (título + conteúdo)
 - ✅ Geração automática de imagem ilustrativa (opcional)
-- ✅ Armazenamento local em JSON (`/data/posts`)
+- ✅ **Armazenamento em memória** (até 50 posts)
+- ✅ **Download opcional** de posts em JSON
 - ✅ Arquitetura com agentes especializados
 - ✅ Abstração de LLM para fácil troca de providers
 
@@ -78,8 +79,19 @@ Acesse: http://localhost:3000
 3. **API** aciona os agentes:
    - `textAgent` → gera título e conteúdo
    - `imageAgent` → gera imagem relacionada (se habilitado)
-4. **Resultado** é salvo em JSON e retornado ao frontend
-5. **PostCard** exibe o resultado com opções de copiar/baixar
+4. **Resultado** é armazenado em memória e retornado ao frontend
+5. **PostCard** exibe o resultado com opções de:
+   - 📋 Copiar texto
+   - 🖼️ Baixar imagem
+   - 💾 Salvar post como JSON
+
+## 💾 Gerenciamento de Memória
+
+- Posts são armazenados em **memória volátil** (RAM)
+- Limite de **50 posts** em memória (FIFO - First In, First Out)
+- Posts são perdidos ao reiniciar o servidor
+- **Salve manualmente** posts importantes usando o botão "Salvar JSON"
+- Ideal para ambientes serverless (Vercel, Netlify, etc.)
 
 ## 🧩 Arquitetura de Agentes
 

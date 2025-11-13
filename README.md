@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MediaHub AI - Sistema de Criação Automática de Posts
 
-## Getting Started
+🚀 MVP funcional para geração automática de posts usando IA (OpenAI GPT-4 + DALL-E).
 
-First, run the development server:
+## 📋 Funcionalidades
+
+- ✅ Interface de chat simples para inserção de prompts
+- ✅ Geração automática de texto (título + conteúdo)
+- ✅ Geração automática de imagem ilustrativa (opcional)
+- ✅ Armazenamento local em JSON (`/data/posts`)
+- ✅ Arquitetura com agentes especializados
+- ✅ Abstração de LLM para fácil troca de providers
+
+## 🏗️ Estrutura do Projeto
+
+```
+mediahub/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── posts/
+│   │   │       └── route.ts          # API endpoint principal
+│   │   ├── layout.tsx
+│   │   ├── page.tsx                  # Interface principal
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── ChatInput.tsx             # Input de prompt
+│   │   └── PostCard.tsx              # Exibição do post gerado
+│   └── lib/
+│       ├── agents/
+│       │   ├── textAgent.ts          # Geração de texto
+│       │   ├── imageAgent.ts         # Geração de imagem
+│       │   └── researchAgent.ts      # (placeholder) Pesquisa contextual
+│       └── utils/
+│           └── llm.ts                # Abstração de chamadas LLM
+├── data/
+│   └── posts/                        # JSONs com posts salvos
+├── .env.example
+└── package.json
+```
+
+## 🚀 Como Usar
+
+### 1. Instalação
+
+```bash
+npm install
+```
+
+### 2. Configuração
+
+Copie o arquivo `.env.example` para `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+Edite `.env.local` e adicione sua chave da OpenAI:
+
+```env
+OPENAI_API_KEY=sk-proj-sua-chave-aqui
+```
+
+> 🔑 Obtenha sua chave em: https://platform.openai.com/api-keys
+
+### 3. Executar
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💡 Como Funciona
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Usuário** insere um prompt no campo de texto
+2. **Frontend** envia requisição POST para `/api/posts`
+3. **API** aciona os agentes:
+   - `textAgent` → gera título e conteúdo
+   - `imageAgent` → gera imagem relacionada (se habilitado)
+4. **Resultado** é salvo em JSON e retornado ao frontend
+5. **PostCard** exibe o resultado com opções de copiar/baixar
 
-## Learn More
+## 🧩 Arquitetura de Agentes
 
-To learn more about Next.js, take a look at the following resources:
+Cada agente é independente e focado em uma tarefa:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```typescript
+// textAgent.ts
+export async function run(prompt: string): Promise<TextOutput>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+// imageAgent.ts
+export async function run(prompt: string): Promise<string>
 
-## Deploy on Vercel
+// researchAgent.ts (futuro)
+export async function run(topic: string): Promise<ResearchData>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 Tecnologias
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **OpenAI API** (GPT-4 + DALL-E 3)
+- **UUID** para IDs únicos
+- **Node.js fs** para armazenamento local
+
+## 📦 Estrutura de Dados (Post)
+
+```json
+{
+  "id": "uuid-v4",
+  "prompt": "tema original do usuário",
+  "title": "Título do Post",
+  "content": "Conteúdo completo...",
+  "image": "data:image/png;base64,...",
+  "createdAt": "2025-11-13T12:00:00.000Z"
+}
+```
+
+## 🔮 Roadmap Futuro
+
+- [ ] Integração com `researchAgent` para pesquisa web
+- [ ] Listagem de posts salvos (GET `/api/posts`)
+- [ ] Edição de posts gerados
+- [ ] Agendamento automático para redes sociais
+- [ ] Suporte para múltiplos providers de IA
+- [ ] Dashboard de analytics
+- [ ] Exportação em múltiplos formatos
+
+## 🤝 Contribuindo
+
+Este é um MVP. Contribuições são bem-vindas!
+
+## 📄 Licença
+
+MIT
+
